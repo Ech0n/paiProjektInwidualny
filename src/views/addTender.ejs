@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Dodaj nowy przetarg</title>
+    <%- include('components/meta') %>
+</head>
+<body>
+
+    <%- include('components/navbar') %>
+    <div class="container">
+        
+        <form id="tenderForm" class="tender-form">
+            <div class="form-group row">
+            <label for="nazwa_instytucji">Nazwa Instytucji:</label>
+            <input type="text" id="nazwa_instytucji" name="nazwa_instytucji" required>
+            </div>
+            <div class="form-group row">
+            <label for="name">Przedmiot przetargu:</label>
+            <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group row">
+            <label for="description">Opis:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group row">
+            <label for="start_date">Data i Czas Rozpoczęcia:</label>
+            <input type="datetime-local" id="start_date" name="start_date" required>
+            </div>
+            <div class="form-group row">
+            <label for="end_date">Data i Czas Zakończenia:</label>
+            <input type="datetime-local" id="end_date" name="end_date" required>
+            </div>
+            <div class="form-group row">
+            <label for="max_offer">Maksymalna Kwota Oferty:</label>
+            <input type="number" id="max_offer" name="max_offer" step="10" required>
+            </div>
+            <input type="submit" class="mt-2 btn btn-primary" value="Dodaj przetarg"> 
+        </form>
+
+
+    </div>
+        <script>
+            document.getElementById('tenderForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = {
+                nazwa_instytucji: document.getElementById('nazwa_instytucji').value,
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                start_date: document.getElementById('start_date').value,
+                end_date: document.getElementById('end_date').value,
+                max_offer: document.getElementById('max_offer').value
+            };
+
+            try {
+                const response = await fetch('/api/tenders/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                alert('Przetarg został dodany pomyślnie!');
+                } else {
+                alert('Wystąpił błąd podczas dodawania przetargu.');
+                }
+            } catch (error) {
+                alert('Wystąpił błąd: ' + error.message);
+            }
+            });
+        </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenders</title>
+    <%- include('components/meta') %>
+</head>
+<body>
+    <%- include('components/navbar') %>
+    <div class="container">
+    <h1><%= tender.name %></h1>
+    <hr>
+    <div class="row">
+        <div class="col-sm">
+            <label for="author">Nazwa Instytucji:</label>
+        </div>
+        <div class="col-sm">
+            <p id="author"><%= tender.author %></p>  
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <label for="start_date">Data Rozpoczęcia:</label>
+        </div>
+        <div class="col-sm">
+            <p id="start_date"><%= new Date(tender.start_date).toLocaleString('pl-PL', { dateStyle: 'long', timeStyle: 'short' }) %></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <label for="end_date">Data zakończenia:</label>
+        </div>
+        <div class="col-sm">
+            <p id="start_date"><%= new Date(tender.start_date).toLocaleString('pl-PL', { dateStyle: 'long', timeStyle: 'short' }) %></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <label for="description">Opis przetargu:</label>
+        </div>
+        <div class="col-sm">
+            <p id="description"><%= tender.description %></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <label for="status">Status przetargu:</label>
+        </div>
+        <div class="col-sm">
+            <p id="description">
+                <% if (isFinished) { %>
+                    Przetarg ukończony
+                <% } else if(notStartedYet) { %>
+                    Przetarg nie rozpoczęty
+                <% } else { %>
+                        Przetarg trwa
+                <% } %>
+            </p>
+        </div>
+    </div>
+    <% if (notStartedYet) { %>
+        <div> Przetarg jeszcze nie rozpoczęty</div>
+    <% } else if (!isFinished) { %>
+        <form action="/api/offer/add/<%= tender.id %>" method="POST">
+            <label for="offerer_name">Nazwa składającego ofertę:</label>
+            <input type="text" id="offerer_name" name="offerer_name" required>
+            <label for="offer_amount">Kwota:</label>
+            <input type="number" id="offer_amount" name="offer_amount" required>
+            <button type="submit">Dodaj ofertę</button>
+        </form>
+    <% } else { %>
+        <% if (offers.length === 0) { %>
+            <div> PRZETARG ZAKOŃCZONY BEZ ROZTRZYGNIĘCIA</div>
+        <% }  %>
+        <h3>Oferty:</h3>
+        <div class="container ">
+
+            <%let it=0; offers.forEach(offer => { it++; %>
+                    <div class="row mt-2">
+                        <% if (it === 1) { %>
+                            <p><strong>Zwycięzca: </strong></p>
+                        <% } else if (it === 2) { %>
+                            <p><strong>Pozostałe oferty: </strong></p>
+                        <% } %>
+                    </div>
+                    <div class=" mt-1 pt-3 row border-bottom rounded  <%= it === 1 ? 'bg-success text-white' : 'bg-light' %>">
+                        <div class="col-sm">
+                        <p>Autor: <%= offer.offerer_name %></p>
+                        
+                        </div>
+                        <div class="col-sm">
+                        <p>Kwota: <%= offer.amount %>
+                        </p>
+
+                        </div>
+                        <div class="col-sm">
+                        <p>Data: <%= offer.submission_date %>
+                        </p>
+                        </div>
+                    </div>
+            <% }); %>
+        </div>
+    <% }  %>
+    </div>
+
+</body>
+</html>

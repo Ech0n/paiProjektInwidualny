@@ -1,0 +1,30 @@
+<table  class="table table-bordered  table-striped table-hover">
+    <thead  class="thead-light">
+        <tr class="table-dark">
+        <th  scope="col">tytuł przetargu</th>
+        <th scope="col">data startu</th>
+        <th scope="col">data zakończenia</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% tenders.forEach(tender => { %>
+        <tr class="clickable-row" data-href="/tender/<%= tender.id %>">
+            <td>
+                <%= tender.name %>
+            </td>
+            <td><%= tender.start_date %></td>
+            <td><%= tender.end_date %></td>
+        </tr>
+    <% }); %>
+    </tbody>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var rows = document.querySelectorAll('.clickable-row');
+            rows.forEach(function (row) {
+                row.addEventListener('click', function () {
+                    window.location.href = this.dataset.href;
+                });
+            });
+        });
+    </script>
+</table>
