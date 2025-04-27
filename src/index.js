@@ -29,8 +29,8 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-const viewsRouter = require("./routes/viewRoutes");
-app.use("/", viewsRouter);
+const viewsController = require("./controllers/viewController");
+app.use("/", viewsController);
 
-const apiRouter = require("./routes/apiRoutes");
-app.use("/api", apiRouter);
+const apiController = require("./controllers/apiController");
+app.use("/api", apiController);

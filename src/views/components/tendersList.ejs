@@ -12,8 +12,8 @@
             <td>
                 <%= tender.name %>
             </td>
-            <td><%= tender.start_date %></td>
-            <td><%= tender.end_date %></td>
+            <td><%= new Date(tender.start_date).toLocaleString('pl-PL', { dateStyle: 'short' , timeStyle: 'short' }) %></td>
+            <td><%= new Date(tender.end_date).toLocaleString('pl-PL', { dateStyle: 'short' , timeStyle: 'short' }) %></td>
         </tr>
     <% }); %>
     </tbody>

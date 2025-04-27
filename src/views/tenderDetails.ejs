@@ -12,7 +12,7 @@
     <h1><%= tender.name %></h1>
     <hr>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-2">
             <label for="author">Nazwa Instytucji:</label>
         </div>
         <div class="col-sm">
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-2">
             <label for="start_date">Data Rozpoczęcia:</label>
         </div>
         <div class="col-sm">
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-2">
             <label for="end_date">Data zakończenia:</label>
         </div>
         <div class="col-sm">
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-2">
             <label for="description">Opis przetargu:</label>
         </div>
         <div class="col-sm">
@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm">
+        <div class="col-2">
             <label for="status">Status przetargu:</label>
         </div>
         <div class="col-sm">
@@ -62,13 +62,40 @@
     <% if (notStartedYet) { %>
         <div> Przetarg jeszcze nie rozpoczęty</div>
     <% } else if (!isFinished) { %>
-        <form action="/api/offer/add/<%= tender.id %>" method="POST">
+        <form id="tenderForm" >
             <label for="offerer_name">Nazwa składającego ofertę:</label>
             <input type="text" id="offerer_name" name="offerer_name" required>
             <label for="offer_amount">Kwota:</label>
             <input type="number" id="offer_amount" name="offer_amount" required>
-            <button type="submit">Dodaj ofertę</button>
+            <button class="btn btn-primary" type="submit">Dodaj ofertę</button>
         </form>
+        <script>
+            document.getElementById('tenderForm').addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const formData = {
+                    offerer_name: document.getElementById('offerer_name').value,
+                    offer_amount: document.getElementById('offer_amount').value,
+                };
+
+                try {
+                    const response = await fetch('/api/offer/add/<%= tender.id %>', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (response.ok) {
+                        alert('Oferta została dodana pomyślnie!');
+                    } else {
+                        alert('Wystąpił błąd podczas dodawania oferty.');
+                    }
+                } catch (error) {
+                    alert('Wystąpił błąd: ' + error.message);
+                }
+            });
+        </script>
     <% } else { %>
         <% if (offers.length === 0) { %>
             <div> PRZETARG ZAKOŃCZONY BEZ ROZTRZYGNIĘCIA</div>
